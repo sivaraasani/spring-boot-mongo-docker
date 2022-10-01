@@ -41,5 +41,6 @@ volumes:
     external: true
     
 networks:
-   customoverlay:
-    external: true
+ default:
+    external:
+      name: customoverlay
