@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springappdeployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: springapp
+  template:
+    metadata:
+      name: springapppod
+      labels:
+        app: springapp
+    spec:
+      containers:
+      - name: springappcontainer
+        image: sivaraasanidocker/spring-mongo-siva:9
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "500m"
+            memory: "2Gi"
+        env:
+        - name: MONGO_DB_USERNAME
+          value: devdb
+        - name: MONGO_DB_PASSWORD
+          value: devdb@123
+        - name: MONGO_DB_HOSTNAME
+          value: mongodb_service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: springappsvc
+spec:
+  type: LoadBalancer
+  selector:
+    app: springapp
+  ports:
+  - port: 80
+    targetPort: 8080
